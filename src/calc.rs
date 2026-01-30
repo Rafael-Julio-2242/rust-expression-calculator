@@ -1,6 +1,6 @@
 use crate::shunting_yard;
 
-use std::io::{self, Write};
+use std::io:: {self, Write };
 
 fn flush() {
  let result = io::stdout().flush();
