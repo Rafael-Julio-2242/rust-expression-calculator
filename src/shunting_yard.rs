@@ -40,8 +40,18 @@ pub fn exec(expression: String) {
         let precedence_result = get_precedence_info(&char_str)
             .expect(&format!("Error on getting precedence info for {char_str}"));
 
-        if precedence_result.precedence == -2 { // Fechamento de parenteses
-            // TODO Desenvolver essa parte do algoritmo
+        if precedence_result.precedence == -2 {
+            loop {
+                let current_top = operator_stack[operator_stack.len() - 1].clone();
+
+                if current_top.eq(&"(") {
+                    operator_stack.pop();
+                    break;
+                }
+
+                operator_stack.pop();
+                output_stack.push(current_top);
+            }
 
             continue;
         }
@@ -62,12 +72,64 @@ pub fn exec(expression: String) {
         let last_value_precedence_result = get_precedence_info(&last_operator_stack_value)
             .expect(&format!("Error on getting precedence info (last operator stack) for {last_operator_stack_value}"));
 
-        if last_value_precedence_result.precedence == -1 { // Topo da pilha é um parêntese
+        if last_value_precedence_result.precedence == -1 {
+            // Topo da pilha é um parêntese
             operator_stack.push(char_str);
             continue;
         }
 
-        // TODO Continuar construção
+        // Validação de precedência para notação posfixa
+        let current_precedence = precedence_result.precedence;
+        let last_precedence = last_value_precedence_result.precedence;
+
+        let current_associativity = precedence_result.str_value;
+        let last_associativity = last_value_precedence_result.str_value;
+
+        if current_precedence > last_precedence
+            || (current_precedence == last_precedence
+                && current_associativity.eq(&last_associativity)
+                && current_associativity.eq("right"))
+        {
+            operator_stack.push(char_str);
+            continue;
+        }
+
+        if current_precedence < last_precedence
+            || (current_precedence == last_precedence
+                && current_associativity.eq(&last_associativity)
+                && current_associativity.eq("left"))
+        {
+            let last_value = operator_stack.pop()
+                .expect("Error Poping Operator Stack!");
+
+            output_stack.push(last_value);
+            
+
+            while operator_stack.len() > 0 {
+                let current_top = operator_stack[operator_stack.len() - 1].clone();
+
+                let current_top_precedence_result = get_precedence_info(&current_top)
+                    .expect("Error getting current_top precedence Result!");
+
+                let current_top_precedence = current_top_precedence_result.precedence;
+                let current_top_associativity = current_top_precedence_result.str_value;
+
+                if current_top_precedence > current_precedence
+                    || (current_top_precedence == current_precedence
+                        && current_top_associativity.eq(&current_associativity)
+                        && current_top_associativity.eq("right")) 
+                    {
+
+                    operator_stack.pop();
+                    output_stack.push(current_top);
+
+                } else {
+                    break;
+                }
+            }
+            operator_stack.push(char_str);
+            continue;
+        }
 
     }
 }
