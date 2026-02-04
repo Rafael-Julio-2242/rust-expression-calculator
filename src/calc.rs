@@ -10,6 +10,11 @@ fn flush() {
  }
 }
 
+fn treat_input(input: &mut String) {
+ *input = input.trim().to_string();
+ *input = input.replace(" ", "");
+}
+
 pub fn start() {
  
  println!("----------- CALCULATOR -----------");
@@ -28,9 +33,13 @@ pub fn start() {
    continue;
   }
 
+  treat_input(&mut input);
+
   println!("Input: {input}");
   let output_stack = shunting_yard::exec(input.clone());
   println!("Output: {output_stack:?}");
+  let output_size = output_stack.len();
+  println!("Output size: {output_size}");
 
   if input.trim() == "q" {
    break;

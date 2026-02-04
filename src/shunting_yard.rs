@@ -16,13 +16,13 @@ pub fn exec(expression: String) -> Vec<String> {
     let mut output_stack: Vec<String> = Vec::<String>::new();
 
     let numeric_range = String::from("123456789");
-    let mut current_numbers: String = String::from("");
+    let mut current_number: String = String::from("");
 
     for char in expression.chars() {
         let char_str = char.to_string();
 
         if numeric_range.contains(&char_str) {
-            current_numbers.push_str(&char_str);
+            current_number.push_str(&char_str);
             // Preciso validar se ele é o ultimo caracter da string
             let last_char = expression
                 .chars()
@@ -31,10 +31,13 @@ pub fn exec(expression: String) -> Vec<String> {
                 .to_string();
 
             if last_char.eq(&char_str) {
-                output_stack.push(current_numbers.clone());
-                current_numbers = String::from("");
+                output_stack.push(current_number.clone());
+                current_number = String::from("");
             }
             continue;
+        } else {
+            output_stack.push(current_number.clone());
+            current_number = String::from("");
         }
 
         let precedence_result = get_precedence_info(&char_str)
