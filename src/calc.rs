@@ -42,6 +42,8 @@ pub fn start() {
   let output_size = output_stack.len();
   println!("Output size: {output_size}");
 
+  let exp_tree = tree::mount_tree(output_stack);
+
   if input.trim() == "q" {
    break;
   }
