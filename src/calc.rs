@@ -1,4 +1,5 @@
 use crate::shunting_yard;
+use crate::tree;
 
 use std::io:: {self, Write };
 
