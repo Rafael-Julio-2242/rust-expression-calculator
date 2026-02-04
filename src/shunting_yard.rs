@@ -11,7 +11,7 @@ struct PrecedenceResult {
     str_value: String,
 }
 
-pub fn exec(expression: String) {
+pub fn exec(expression: String) -> Vec<String> {
     let mut operator_stack: Vec<String> = Vec::<String>::new();
     let mut output_stack: Vec<String> = Vec::<String>::new();
 
@@ -132,6 +132,28 @@ pub fn exec(expression: String) {
         }
 
     }
+
+    operator_stack
+        .iter()
+        .filter(|value: &&String| -> bool { !value.trim().is_empty() })
+        .map(|value: &String| -> String { value.to_string() })
+        .collect::<Vec<String>>()
+        .clone_into(&mut operator_stack);
+
+    if operator_stack.len() >= 1 {
+        operator_stack.reverse();
+        output_stack.append(&mut operator_stack);
+    }
+
+    output_stack
+        .iter()
+        .filter(|value: &&String| -> bool { !value.trim().is_empty() })
+        .map(|value: &String| -> String { value.to_string() })
+        .collect::<Vec<String>>()
+        .clone_into(&mut operator_stack);
+
+    
+    output_stack
 }
 
 fn get_precedence_info(c: &str) -> Result<PrecedenceResult, PrecedenceError> {

@@ -28,6 +28,10 @@ pub fn start() {
    continue;
   }
 
+  println!("Input: {input}");
+  let output_stack = shunting_yard::exec(input.clone());
+  println!("Output: {output_stack:?}");
+
   if input.trim() == "q" {
    break;
   }
