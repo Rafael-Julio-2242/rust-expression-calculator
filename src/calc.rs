@@ -1,3 +1,4 @@
+use crate::eval;
 use crate::shunting_yard;
 use crate::tree;
 
@@ -36,11 +37,7 @@ pub fn start() {
 
   treat_input(&mut input);
 
-  println!("Input: {input}");
   let output_stack = shunting_yard::exec(input.clone());
-  println!("Output: {output_stack:?}");
-  let output_size = output_stack.len();
-  println!("Output size: {output_size}");
 
   let mut node_stack = tree::NodeStack::new();
   let result = node_stack.mount_tree(output_stack);
@@ -52,8 +49,16 @@ pub fn start() {
 
   let root_node = result.unwrap();
 
-  // Aqui vem a realização do cálculo
+  let calc_result = eval::exec(root_node);
+
+  if calc_result.is_err() {
+   println!("{calc_result:?}");
+   continue;
+  }
   
+  let result_value = calc_result.unwrap();
+
+  println!("Result: {result_value}");
 
   if input.trim() == "q" {
    break;
