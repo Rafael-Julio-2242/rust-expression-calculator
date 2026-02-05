@@ -48,7 +48,6 @@ pub fn start() {
   }
 
   let root_node = result.unwrap();
-
   let calc_result = eval::exec(root_node);
 
   if calc_result.is_err() {

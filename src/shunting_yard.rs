@@ -43,11 +43,11 @@ pub fn exec(expression: String) -> Vec<String> {
         let precedence_result = get_precedence_info(&char_str)
             .expect(&format!("Error on getting precedence info for {char_str}"));
 
-        if precedence_result.precedence == -2 {
+        if precedence_result.precedence == -2 { // Fechamento de parêntese
             loop {
                 let current_top = operator_stack[operator_stack.len() - 1].clone();
 
-                if current_top.eq(&"(") {
+                if current_top.as_str().eq("(") {
                     operator_stack.pop();
                     break;
                 }
@@ -151,12 +151,28 @@ pub fn exec(expression: String) -> Vec<String> {
     output_stack
         .iter()
         .filter(|value: &&String| -> bool { !value.trim().is_empty() })
+        .filter(|value: &&String| -> bool { 
+            let str_value = value.as_str();
+            !str_value.eq("")
+        })
         .map(|value: &String| -> String { value.to_string() })
         .collect::<Vec<String>>()
         .clone_into(&mut operator_stack);
 
     
-    output_stack
+
+    let mut filtered_stack: Vec<String> = Vec::new();
+
+    for value in operator_stack {
+        if value.trim().is_empty() {
+            continue;
+        }
+
+        filtered_stack.push(value);
+    }
+
+
+    filtered_stack
 }
 
 fn get_precedence_info(c: &str) -> Result<PrecedenceResult, PrecedenceError> {
@@ -199,7 +215,7 @@ fn get_precedence_info(c: &str) -> Result<PrecedenceResult, PrecedenceError> {
         }
         ")" => {
             return Ok(PrecedenceResult {
-                precedence: -1,
+                precedence: -2,
                 str_value: String::from(")"),
             });
         }
