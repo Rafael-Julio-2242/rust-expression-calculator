@@ -45,7 +45,15 @@ pub fn start() {
   let mut node_stack = tree::NodeStack::new();
   let result = node_stack.mount_tree(output_stack);
 
+  if result.is_err() {
+   println!("{result:?}");
+   continue;
+  }
 
+  let root_node = result.unwrap();
+
+  // Aqui vem a realização do cálculo
+  
 
   if input.trim() == "q" {
    break;

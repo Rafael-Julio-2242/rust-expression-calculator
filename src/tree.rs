@@ -12,16 +12,16 @@ pub enum MountTreeError {
     NodesTreeNotEmpty,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Node {
-    value: String,
-    left: Option<Box<Node>>,
-    right: Option<Box<Node>>,
+    pub value: String,
+    pub left: Option<Box<Node>>,
+    pub right: Option<Box<Node>>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct NodeStack {
-    nodes: Vec<Node>,
+    pub nodes: Vec<Node>,
 }
 
 impl NodeStack {
